@@ -1,25 +1,30 @@
 #include <Arduino.h>
 #include <Adafruit_NeoPixel.h>
 
-#define NEO_PIN 45
-#define LED_COUNT 1 
+#define INTERVAL  2000
+#define LED_PIN   48
+#define NEO_PIN   45
+#define NEO_COUNT 1
 
 void led_blinky(void *pvParameters)
 {
-  pinMode(GPIO_NUM_48, OUTPUT); // Initialize LED pin
+  pinMode(LED_PIN, OUTPUT); // Initialize LED pin
 
   while(1)
   {
-    digitalWrite(GPIO_NUM_48, HIGH);  // Turn ON LED
-    vTaskDelay(1000);
-    digitalWrite(GPIO_NUM_48, LOW);   // Turn OFF LED
-    vTaskDelay(1000);
+    digitalWrite(LED_PIN, HIGH);  // Turn ON LED
+    Serial.println("Single LED => ON");
+    vTaskDelay(INTERVAL);
+
+    digitalWrite(LED_PIN, LOW);   // Turn OFF LED
+    Serial.println("Single LED => OFF");
+    vTaskDelay(INTERVAL);
   }
 }
 
 void neo_blinky(void *pvParameters)
 {
-    Adafruit_NeoPixel strip(LED_COUNT, NEO_PIN, NEO_GRB + NEO_KHZ800);
+    Adafruit_NeoPixel strip(NEO_COUNT, NEO_PIN, NEO_GRB + NEO_KHZ800);
     
     strip.begin();
     strip.clear();  // Set all pixels to off to start
@@ -29,10 +34,13 @@ void neo_blinky(void *pvParameters)
     {                          
         strip.setPixelColor(0, strip.Color(255, 0, 0)); // Set pixel 0 to red
         strip.show();                                   // Update the strip
-        vTaskDelay(1000);
+        Serial.println("NEO LED => ON");
+        vTaskDelay(INTERVAL);
+
         strip.setPixelColor(0, strip.Color(0, 0, 0));   // Set the pixel to off
         strip.show();                                   // Update the strip
-        vTaskDelay(1000);
+        Serial.println("NEO LED => OFF");
+        vTaskDelay(INTERVAL);
     }
 }
 
