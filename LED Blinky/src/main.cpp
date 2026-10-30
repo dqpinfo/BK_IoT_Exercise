@@ -53,6 +53,7 @@ void setup()
   xTaskCreate(neo_blinky, "NEO Control", 2048, NULL, 2, NULL);  // Task control LED NEO
 }
 
-void loop() {
+void loop()
+{
   // put your main code here, to run repeatedly:
 }

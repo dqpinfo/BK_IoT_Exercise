@@ -22,21 +22,7 @@ def on_subscribe(client, userdata, mid, granted_qos):
     print("Subscribed to topic: " + SUBSCRIBE_TOPIC)
 
 def on_message(client, userdata, message):
-    
     print("Received: ", message.payload.decode("utf-8"))
-
-    try:
-        json_obj = json.loads(message.payload)
-
-        if json_obj['method'] == "setValue":
-
-            temp_data = {'value': True}
-            temp_data['value'] = json_obj['params']
-
-            print("temp_data: ", temp_data)
-            #client.publish('v1/devices/me/attributes', json.dumps(temp_data), 1)
-    except:
-        pass
 
 
 def main():
@@ -58,7 +44,7 @@ def main():
 
         temperature = round(temperature + random.choice([-0.1, 0.1]), 1)
         humidity    = round(humidity + random.choice([-0.1, 0.1]), 1)
-        print(f'temperature: {temperature} - humidity: {humidity}')
+        print(f'temperature: {temperature} °C- humidity: {humidity} %')
 
         collect_data = {'temperature': temperature, 'humidity': humidity}
         client.publish(PUBLISH_TELEMETRY, json.dumps(collect_data), 1)

@@ -61,7 +61,7 @@ def main():
 
         temperature = round(temperature + random.choice([-0.1, 0.1]), 1)
         humidity    = round(humidity + random.choice([-0.1, 0.1]), 1)
-        print(f'temperature: {temperature} - humidity: {humidity}')
+        print(f'temperature: {temperature} °C- humidity: {humidity} %')
 
         collect_data = {'temperature': temperature, 'humidity': humidity,
                         'longitude': POSITION_LONGITUDE, 'latitude': POSITION_LATITUDE}
