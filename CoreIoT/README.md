@@ -23,9 +23,10 @@ Type:       Device
 Device:     DHT20_01  
 Data keys:  latitude, longitude  
 **Appearance**  
-Map provider setting: Google maps  
-Latitude key name:    latitude  
-Longitude key name:   longitude
+Map provider settings:    OpenStreet maps  
+OpenStreet map provider:  OpenStreetMap.HOT  
+Latitude key name:        latitude  
+Longitude key name:       longitude
 
 # Chạy chương trình
 1. Tạo và active môi trường ảo:
