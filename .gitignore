@@ -79,7 +79,6 @@ Testing/
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 .vscode/ipch/
-.vscode/extensions.json
 
 # Hệ điều hành và môi trường
 .DS_Store
