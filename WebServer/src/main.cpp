@@ -1,11 +1,19 @@
 #include <Arduino.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "freertos/semphr.h"
 #include "global.h"
 #include "task_wifi.h"
 #include <Adafruit_NeoPixel.h>
+#include "DHT20.h"
 
 #define LED_PIN   48
 #define NEO_PIN   45
 #define NEO_COUNT 1
+#define SDA_PIN   11
+#define SCL_PIN   12
+
+DHT20 dht;
 
 void internet_task(void *pvParameters)
 {
@@ -14,8 +22,7 @@ void internet_task(void *pvParameters)
     // Bị chặn ở đây đến khi xSemaphoreGive() được gọi
     if (xSemaphoreTake(xBinarySemaphoreInternet, portMAX_DELAY) == pdTRUE)
     {
-      Serial.println("Connected to internet");
-      // TODO
+      // TODO: execute tasks need WiFi connection
     }
   }
 }
@@ -24,14 +31,20 @@ void task_dht20(void *pvParameters)
 {
   while (1)
   {
-    glob_temperature = (float)random(10, 99);
-    glob_humidity = (float)random(10, 99);
+    dht.read();
 
-    //Serial.print(glob_temperature);
-    //Serial.print(" °C Humidity: ");
-    //Serial.print(glob_humidity);
-    //Serial.println(" %");
-    
+    glob_temperature = dht.getTemperature();
+    glob_humidity = dht.getHumidity();
+
+    if (isnan(glob_temperature) || isnan(glob_humidity))
+    {
+      Serial.println("Read DHT20 sensor failed");
+    }
+    else
+    {
+      Serial.printf("Temperature: %.1f °C - Humidity: %.1f %%\n", glob_temperature, glob_humidity);
+    }
+
     vTaskDelay(3000);
   }
 }
@@ -75,12 +88,16 @@ void setup()
 {
   // put your setup code here, to run once:
   Serial.begin(115200);
-  delay(1000);
 
-  // 1) Tạo semaphore trước khi task dùng
+  Wire.begin(SDA_PIN, SCL_PIN);
+  dht.begin();
+
+  delay(1000);  // Wait for sensor stable
+
+  // Tạo semaphore trước khi task dùng
   xBinarySemaphoreInternet = xSemaphoreCreateBinary();
  
-  // 2) Khởi động các task
+  // Khởi động các task
   xTaskCreate(task_wifi, "task wifi", 8192, NULL, 31, NULL);
   xTaskCreate(task_dht20, "task dht20", 4096, NULL, 30, NULL);
   xTaskCreate(task_LED, "task LED", 4096, NULL, 29, NULL);

@@ -13,15 +13,13 @@ void startAP()
     WiFi.mode(WIFI_AP);
     WiFi.softAP(ssid.c_str(), password.c_str());
 
-    Serial.print("AP IP address: ");
-    Serial.println(WiFi.softAPIP().toString());
+    Serial.printf("AP IP address:  %s\n", WiFi.softAPIP().toString());
 }
 
 // STA mode
 void connectToWiFi()
 {
-    Serial.print("Connecting to ");
-    Serial.println(wifi_ssid.c_str());
+    Serial.printf("Connecting to %s\n", wifi_ssid.c_str());
 
     isWifiConnected = false;
     lastConnectWifiTime = millis();
