@@ -6,6 +6,9 @@
 #define SCL_PIN 12
 
 DHT20 dht;
+float temperature = 0.0;
+float humidity = 0.0;
+char buffer[64];
 
 void task_scan_I2C_bus(void *pvParameters)
 {
@@ -13,8 +16,6 @@ void task_scan_I2C_bus(void *pvParameters)
 
   while (1)
   {
-    //Serial.println("Scanning I2C bus...");
-
     for (address = 1; address < 127; address++)
     {
       Wire.beginTransmission(address);
@@ -22,13 +23,13 @@ void task_scan_I2C_bus(void *pvParameters)
 
       if (error == 0)
       {
-        Serial.print("I2C device found at: 0x");
+        Serial.print("\nI2C device found at: 0x");
         if (address < 16) Serial.print("0");
         Serial.println(address, HEX);
       }
       else
       {
-        //Serial.print(error);
+        Serial.print(".");
       }
     }
 
@@ -42,13 +43,21 @@ void task_read_DHT20_info(void *pvParameters)
   while (1)
   {
     dht.read();
-    double temperature = dht.getTemperature();
-    double humidity = dht.getHumidity();
 
-    Serial.print("Temperature: "); Serial.print(temperature); Serial.print(" °C");
-    Serial.print(" - Humidity: "); Serial.print(humidity); Serial.println(" %");
+    temperature = dht.getTemperature();
+    humidity = dht.getHumidity();
 
-    vTaskDelay(2000);
+    if (isnan(temperature) || isnan(humidity))
+    {
+      Serial.println("Read DHT20 sensor failed");
+    }
+    else
+    {
+      sprintf(buffer, "Temperature: %.1f °C - Humidity: %.1f %%", temperature, humidity);
+      Serial.println(buffer);
+    }
+
+    vTaskDelay(3000);
   }
 }
 
@@ -56,13 +65,14 @@ void setup()
 {
   // put your setup code here, to run once:
   Serial.begin(115200);
-  delay(1000);
   
   Wire.begin(SDA_PIN, SCL_PIN);
   dht.begin();
+  
+  delay(1000);  // Wait for sensor stable
 
-  //xTaskCreate(task_scan_I2C_bus, "Scan I2C Bus", 2048, NULL, 31, NULL);     // Task scan I2C bus
-  xTaskCreate(task_read_DHT20_info, "Read DHT20 Info", 2048, NULL, 2, NULL);  // Task read DHT20 information
+  //xTaskCreate(task_scan_I2C_bus, "Scan I2C Bus", 2048, NULL, 31, NULL); // Task scan I2C bus
+  xTaskCreate(task_read_DHT20_info, "Read DHT20 Info", 4096, NULL, 10, NULL); // Task read DHT20 information
 }
 
 void loop()
