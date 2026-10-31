@@ -98,8 +98,8 @@ void setup()
   xBinarySemaphoreInternet = xSemaphoreCreateBinary();
  
   // Khởi động các task
-  xTaskCreate(task_wifi, "task wifi", 8192, NULL, 31, NULL);
-  xTaskCreate(task_dht20, "task dht20", 4096, NULL, 30, NULL);
+  xTaskCreate(task_wifi, "task WiFi", 8192, NULL, 31, NULL);
+  xTaskCreate(task_dht20, "task DHT20", 4096, NULL, 30, NULL);
   xTaskCreate(task_LED, "task LED", 4096, NULL, 29, NULL);
 }
  
