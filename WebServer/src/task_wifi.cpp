@@ -22,7 +22,7 @@ void connectToWiFi()
 {
     Serial.print("Connecting to: ");
     Serial.print(wifi_ssid.c_str());
-    Serial.print(" Password: ");
+    Serial.println(" Password: ");
     //Serial.println(wifi_password.c_str());
 
     isWifiConnected = false;
@@ -52,7 +52,7 @@ void task_wifi(void *pvParameters)
         // Switch to AP Mode when boot button pressed
         if (digitalRead(BOOT_BUTTON_PIN) == LOW)
         {
-            vTaskDelay(100); // Simple debounce
+            vTaskDelay(500); // Simple debounce
 
             if (digitalRead(BOOT_BUTTON_PIN) == LOW)
             {
