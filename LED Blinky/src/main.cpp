@@ -49,8 +49,8 @@ void setup()
   // put your setup code here, to run once:
   Serial.begin(115200);
   
-  xTaskCreate(led_blinky, "LED Control", 2048, NULL, 2, NULL);  // Task control single LED
-  xTaskCreate(neo_blinky, "NEO Control", 2048, NULL, 2, NULL);  // Task control LED NEO
+  xTaskCreate(led_blinky, "LED Control", 2048, NULL, 31, NULL); // Task control single LED
+  xTaskCreate(neo_blinky, "NEO Control", 2048, NULL, 1, NULL);  // Task control LED NEO
 }
 
 void loop()
