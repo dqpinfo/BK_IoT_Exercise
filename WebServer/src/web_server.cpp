@@ -3,6 +3,7 @@
 
 WebServer server(80);
 
+// Web layout
 String mainPage()
 {
   String led1 = glob_singleLEDState ? "ON" : "OFF";
@@ -269,7 +270,7 @@ String settingsPage()
   )rawliteral";
 }
 
-// ========== Handlers ==========
+// Handlers
 void handleRoot()
 {
   server.send(200, "text/html", mainPage());
@@ -278,6 +279,7 @@ void handleRoot()
 void handleToggle()
 {
   int led = server.arg("led").toInt();
+
   if (led == 1)
   {
     glob_singleLEDState = !glob_singleLEDState;
@@ -286,6 +288,7 @@ void handleToggle()
   {
     glob_neoLEDState = !glob_neoLEDState;
   }
+
   server.send(200, "application/json",
               "{\"led1\":\"" + String(glob_singleLEDState ? "ON" : "OFF") +
               "\",\"led2\":\"" + String(glob_neoLEDState ? "ON" : "OFF") + "\"}");
@@ -308,7 +311,7 @@ void handleConnect()
   wifi_password = server.arg("pass");
   server.send(200, "text/plain", "Connecting....");
 
-  isSTDMode = true;
+  isSTDMode = true; // Connecting to internet
 }
 
 void setupServer()

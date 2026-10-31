@@ -67,7 +67,7 @@ void task_LED(void *pvParameters)
       strip.show();                                   // Update the strip
     }
     
-    vTaskDelay(200);
+    vTaskDelay(100);
   }
 }
 
@@ -75,8 +75,9 @@ void setup()
 {
   // put your setup code here, to run once:
   Serial.begin(115200);
-  
-  // 1) Tạo semaphore TRƯỚC khi task dùng
+  delay(1000);
+
+  // 1) Tạo semaphore trước khi task dùng
   xBinarySemaphoreInternet = xSemaphoreCreateBinary();
  
   // 2) Khởi động các task

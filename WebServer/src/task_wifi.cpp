@@ -14,16 +14,14 @@ void startAP()
     WiFi.softAP(ssid.c_str(), password.c_str());
 
     Serial.print("AP IP address: ");
-    Serial.println(WiFi.softAPIP());
+    Serial.println(WiFi.softAPIP().toString());
 }
 
 // STA mode
 void connectToWiFi()
 {
-    Serial.print("Connecting to: ");
-    Serial.print(wifi_ssid.c_str());
-    Serial.println(" Password: ");
-    //Serial.println(wifi_password.c_str());
+    Serial.print("Connecting to ");
+    Serial.println(wifi_ssid.c_str());
 
     isWifiConnected = false;
     lastConnectWifiTime = millis();
@@ -52,7 +50,7 @@ void task_wifi(void *pvParameters)
         // Switch to AP Mode when boot button pressed
         if (digitalRead(BOOT_BUTTON_PIN) == LOW)
         {
-            vTaskDelay(500); // Simple debounce
+            vTaskDelay(300); // Simple debounce
 
             if (digitalRead(BOOT_BUTTON_PIN) == LOW)
             {

@@ -7,8 +7,8 @@ SemaphoreHandle_t xBinarySemaphoreInternet = NULL;
 String ssid = "ESP32-ABC";
 String password = "12345678";
 
-String wifi_ssid = "PhucDQ";
-String wifi_password = "572z-qtpx-db2o";
+String wifi_ssid = "dump wifi";
+String wifi_password = "dump password";
 
 float glob_temperature = 0;
 float glob_humidity = 0;
